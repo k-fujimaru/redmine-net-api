@@ -1,5 +1,5 @@
 /*
-   Copyright 2011 - 2018 Adrian Popescu.
+   Copyright 2011 - 2019 Adrian Popescu.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ namespace Redmine.Net.Api.JSonConverters
                 var entity = new CustomFieldPossibleValue();
 
                 entity.Value = dictionary.GetValue<string>(RedmineKeys.VALUE);
+                entity.Label = dictionary.GetValue<string>(RedmineKeys.LABEL);
 
                 return entity;
             }

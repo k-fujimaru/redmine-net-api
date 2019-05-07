@@ -1,5 +1,5 @@
 /*
-   Copyright 2011 - 2018 Adrian Popescu.
+   Copyright 2011 - 2019 Adrian Popescu.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -155,10 +155,10 @@ namespace Redmine.Net.Api.Extensions
             var type = typeof(T);
             if (!dict.TryGetValue(key, out val)) return default(T);
 
+            if (val == null) return default(T);
+
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
-                if (val == null) return default(T);
-
                 type = Nullable.GetUnderlyingType(type);
             }
 

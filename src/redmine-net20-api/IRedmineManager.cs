@@ -1,5 +1,5 @@
 /*
-   Copyright 2011 - 2018 Adrian Popescu.
+   Copyright 2011 - 2019 Adrian Popescu.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -146,6 +146,22 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         PaginatedObjects<T> GetPaginatedObjects<T>(NameValueCollection parameters) where T : class, new();
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="include"></param>
+        /// <returns></returns>
+        int Count<T>(params string[] include) where T : class, new();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        int Count<T>(NameValueCollection parameters) where T : class, new();
+
         /// <summary>
         /// 
         /// </summary>
