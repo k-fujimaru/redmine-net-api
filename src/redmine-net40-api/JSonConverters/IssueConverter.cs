@@ -100,13 +100,17 @@ namespace Redmine.Net.Api.JSonConverters
 
             if (entity != null)
             {
-                result.Add(RedmineKeys.SUBJECT, entity.Subject);
-                result.Add(RedmineKeys.DESCRIPTION, entity.Description);
-                result.Add(RedmineKeys.NOTES, entity.Notes);
+                if (entity.Subject != null)
+                    result.Add(RedmineKeys.SUBJECT, entity.Subject);
+                if (entity.Description != null)
+                    result.Add(RedmineKeys.DESCRIPTION, entity.Description);
+                if (entity.Notes != null)
+                    result.Add(RedmineKeys.NOTES, entity.Notes);
                 if (entity.Id != 0)
                 {
                     result.Add(RedmineKeys.PRIVATE_NOTES, entity.PrivateNotes.ToString().ToLowerInvariant());
                 }
+                // TODO IsPrivate is not Nullable. Is must be fixed as bool? type field.
                 result.Add(RedmineKeys.IS_PRIVATE, entity.IsPrivate.ToString().ToLowerInvariant());
                 result.WriteIdIfNotNull(entity.Project, RedmineKeys.PROJECT_ID);
                 result.WriteIdIfNotNull(entity.Priority, RedmineKeys.PRIORITY_ID);
@@ -115,12 +119,16 @@ namespace Redmine.Net.Api.JSonConverters
                 result.WriteIdIfNotNull(entity.Tracker, RedmineKeys.TRACKER_ID);
                 result.WriteIdIfNotNull(entity.AssignedTo, RedmineKeys.ASSIGNED_TO_ID);
                 result.WriteIdIfNotNull(entity.FixedVersion, RedmineKeys.FIXED_VERSION_ID);
-                result.WriteValueOrEmpty(entity.EstimatedHours, RedmineKeys.ESTIMATED_HOURS);
-
-                result.WriteIdOrEmpty(entity.ParentIssue, RedmineKeys.PARENT_ISSUE_ID);
-                result.WriteDateOrEmpty(entity.StartDate, RedmineKeys.START_DATE);
-                result.WriteDateOrEmpty(entity.DueDate, RedmineKeys.DUE_DATE);
-                result.WriteDateOrEmpty(entity.UpdatedOn, RedmineKeys.UPDATED_ON);
+                if (entity.EstimatedHours != null)
+                    result.WriteValueOrEmpty(entity.EstimatedHours, RedmineKeys.ESTIMATED_HOURS);
+                if (entity.ParentIssue != null)
+                    result.WriteIdOrEmpty(entity.ParentIssue, RedmineKeys.PARENT_ISSUE_ID);
+                if (entity.StartDate != null)
+                    result.WriteDateOrEmpty(entity.StartDate, RedmineKeys.START_DATE);
+                if (entity.DueDate != null)
+                    result.WriteDateOrEmpty(entity.DueDate, RedmineKeys.DUE_DATE);
+                if (entity.UpdatedOn != null)
+                    result.WriteDateOrEmpty(entity.UpdatedOn, RedmineKeys.UPDATED_ON);
 
                 if (entity.DoneRatio != null)
                     result.Add(RedmineKeys.DONE_RATIO, entity.DoneRatio.Value.ToString(CultureInfo.InvariantCulture));

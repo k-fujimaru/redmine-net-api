@@ -454,15 +454,18 @@ namespace Redmine.Net.Api.Types
         /// <param name="writer"></param>
         public void WriteXml(XmlWriter writer)
         {
-            writer.WriteElementString(RedmineKeys.SUBJECT, Subject);
-            writer.WriteElementString(RedmineKeys.NOTES, Notes);
+            if (Subject != null)
+                writer.WriteElementString(RedmineKeys.SUBJECT, Subject);
+            if (Notes != null)
+                writer.WriteElementString(RedmineKeys.NOTES, Notes);
 
             if (Id != 0)
             {
                 writer.WriteElementString(RedmineKeys.PRIVATE_NOTES, PrivateNotes.ToString().ToLowerInvariant());
             }
-
-            writer.WriteElementString(RedmineKeys.DESCRIPTION, Description);
+            if (Description != null)
+                writer.WriteElementString(RedmineKeys.DESCRIPTION, Description);
+            // TODO IsPrivate is not Nullable. Is must be fixed as bool? type field.
             writer.WriteStartElement(RedmineKeys.IS_PRIVATE);
             writer.WriteValue(IsPrivate.ToString().ToLowerInvariant());
             writer.WriteEndElement();
@@ -475,12 +478,16 @@ namespace Redmine.Net.Api.Types
             writer.WriteIdIfNotNull(AssignedTo, RedmineKeys.ASSIGNED_TO_ID);
             writer.WriteIdIfNotNull(ParentIssue, RedmineKeys.PARENT_ISSUE_ID);
             writer.WriteIdIfNotNull(FixedVersion, RedmineKeys.FIXED_VERSION_ID);
-
-            writer.WriteValueOrEmpty(EstimatedHours, RedmineKeys.ESTIMATED_HOURS);
-            writer.WriteValueOrEmpty(DoneRatio, RedmineKeys.DONE_RATIO);
-            writer.WriteDateOrEmpty(StartDate, RedmineKeys.START_DATE);
-            writer.WriteDateOrEmpty(DueDate, RedmineKeys.DUE_DATE);
-            writer.WriteDateOrEmpty(UpdatedOn, RedmineKeys.UPDATED_ON);
+            if (EstimatedHours != null)
+                writer.WriteValueOrEmpty(EstimatedHours, RedmineKeys.ESTIMATED_HOURS);
+            if (DoneRatio != null)
+                writer.WriteValueOrEmpty(DoneRatio, RedmineKeys.DONE_RATIO);
+            if (StartDate != null)
+                writer.WriteDateOrEmpty(StartDate, RedmineKeys.START_DATE);
+            if (DueDate != null)
+                writer.WriteDateOrEmpty(DueDate, RedmineKeys.DUE_DATE);
+            if (UpdatedOn != null)
+                writer.WriteDateOrEmpty(UpdatedOn, RedmineKeys.UPDATED_ON);
 
             writer.WriteArray(Uploads, RedmineKeys.UPLOADS);
             writer.WriteArray(CustomFields, RedmineKeys.CUSTOM_FIELDS);
