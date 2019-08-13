@@ -70,21 +70,22 @@ namespace Redmine.Net.Api
         private readonly CredentialCache cache;
         private string host;
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="RedmineManager" /> class.
-        /// </summary>
-        /// <param name="host">The host.</param>
-        /// <param name="mimeFormat">The MIME format.</param>
-        /// <param name="verifyServerCert">if set to <c>true</c> [verify server cert].</param>
-        /// <param name="proxy">The proxy.</param>
-        /// <param name="securityProtocolType">Use this parameter to specify a SecurityProtcolType. Note: it is recommended to leave this parameter at its default value as this setting also affects the calling application process.</param>
-        /// <exception cref="Redmine.Net.Api.Exceptions.RedmineException">
-        ///     Host is not defined!
-        ///     or
-        ///     The host is not valid!
-        /// </exception>
-        public RedmineManager(string host, MimeFormat mimeFormat = MimeFormat.Xml, bool verifyServerCert = true,
-            IWebProxy proxy = null, SecurityProtocolType securityProtocolType = default(SecurityProtocolType))
+		/// <summary>
+		///     Initializes a new instance of the <see cref="RedmineManager" /> class.
+		/// </summary>
+		/// <param name="host">The host.</param>
+		/// <param name="mimeFormat">The MIME format.</param>
+		/// <param name="verifyServerCert">if set to <c>true</c> [verify server cert].</param>
+		/// <param name="proxy">The proxy.</param>
+		/// <param name="securityProtocolType">Use this parameter to specify a SecurityProtcolType. Note: it is recommended to leave this parameter at its default value as this setting also affects the calling application process.</param>
+		/// <param name="keepAlive">The keep-alive.</param>
+		/// <exception cref="Redmine.Net.Api.Exceptions.RedmineException">
+		///     Host is not defined!
+		///     or
+		///     The host is not valid!
+		/// </exception>
+		public RedmineManager(string host, MimeFormat mimeFormat = MimeFormat.Xml, bool verifyServerCert = true,
+            IWebProxy proxy = null, SecurityProtocolType securityProtocolType = default(SecurityProtocolType), bool keepAlive = false)
         {
             if (string.IsNullOrEmpty(host)) throw new RedmineException("Host is not defined!");
             PageSize = 25;
@@ -98,6 +99,7 @@ namespace Redmine.Net.Api
             MimeFormat = mimeFormat;
             Proxy = proxy;
             SecurityProtocolType = securityProtocolType;
+			KeepAlive = keepAlive;
 
             ServicePointManager.SecurityProtocol = securityProtocolType;
             if (!verifyServerCert)
@@ -106,30 +108,31 @@ namespace Redmine.Net.Api
             }
         }
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="RedmineManager" /> class.
-        ///     Most of the time, the API requires authentication. To enable the API-style authentication, you have to check Enable
-        ///     REST API in Administration -&gt; Settings -&gt; Authentication. Then, authentication can be done in 2 different
-        ///     ways:
-        ///     using your regular login/password via HTTP Basic authentication.
-        ///     using your API key which is a handy way to avoid putting a password in a script. The API key may be attached to
-        ///     each request in one of the following way:
-        ///     passed in as a "key" parameter
-        ///     passed in as a username with a random password via HTTP Basic authentication
-        ///     passed in as a "X-Redmine-API-Key" HTTP header (added in Redmine 1.1.0)
-        ///     You can find your API key on your account page ( /my/account ) when logged in, on the right-hand pane of the
-        ///     default layout.
-        /// </summary>
-        /// <param name="host">The host.</param>
-        /// <param name="apiKey">The API key.</param>
-        /// <param name="mimeFormat">The MIME format.</param>
-        /// <param name="verifyServerCert">if set to <c>true</c> [verify server cert].</param>
-        /// <param name="proxy">The proxy.</param>
-        /// <param name="securityProtocolType">Use this parameter to specify a SecurityProtcolType. Note: it is recommended to leave this parameter at its default value as this setting also affects the calling application process.</param>
-        public RedmineManager(string host, string apiKey, MimeFormat mimeFormat = MimeFormat.Xml,
+		/// <summary>
+		///     Initializes a new instance of the <see cref="RedmineManager" /> class.
+		///     Most of the time, the API requires authentication. To enable the API-style authentication, you have to check Enable
+		///     REST API in Administration -&gt; Settings -&gt; Authentication. Then, authentication can be done in 2 different
+		///     ways:
+		///     using your regular login/password via HTTP Basic authentication.
+		///     using your API key which is a handy way to avoid putting a password in a script. The API key may be attached to
+		///     each request in one of the following way:
+		///     passed in as a "key" parameter
+		///     passed in as a username with a random password via HTTP Basic authentication
+		///     passed in as a "X-Redmine-API-Key" HTTP header (added in Redmine 1.1.0)
+		///     You can find your API key on your account page ( /my/account ) when logged in, on the right-hand pane of the
+		///     default layout.
+		/// </summary>
+		/// <param name="host">The host.</param>
+		/// <param name="apiKey">The API key.</param>
+		/// <param name="mimeFormat">The MIME format.</param>
+		/// <param name="verifyServerCert">if set to <c>true</c> [verify server cert].</param>
+		/// <param name="proxy">The proxy.</param>
+		/// <param name="keepAlive">The keep-alive.</param>
+		/// <param name="securityProtocolType">Use this parameter to specify a SecurityProtcolType. Note: it is recommended to leave this parameter at its default value as this setting also affects the calling application process.</param>
+		public RedmineManager(string host, string apiKey, MimeFormat mimeFormat = MimeFormat.Xml,
             bool verifyServerCert = true, IWebProxy proxy = null,
-            SecurityProtocolType securityProtocolType = default(SecurityProtocolType))
-            : this(host, mimeFormat, verifyServerCert, proxy, securityProtocolType)
+            SecurityProtocolType securityProtocolType = default(SecurityProtocolType) , bool keepAlive = false )
+            : this(host, mimeFormat, verifyServerCert, proxy, securityProtocolType, keepAlive)
         {
             ApiKey = apiKey;
         }
@@ -157,8 +160,8 @@ namespace Redmine.Net.Api
         /// <param name="securityProtocolType">Use this parameter to specify a SecurityProtcolType. Note: it is recommended to leave this parameter at its default value as this setting also affects the calling application process.</param>
         public RedmineManager(string host, string login, string password, MimeFormat mimeFormat = MimeFormat.Xml,
             bool verifyServerCert = true, IWebProxy proxy = null,
-            SecurityProtocolType securityProtocolType = default(SecurityProtocolType))
-            : this(host, mimeFormat, verifyServerCert, proxy, securityProtocolType)
+            SecurityProtocolType securityProtocolType = default(SecurityProtocolType) , bool keepAlive = false )
+			: this(host, mimeFormat, verifyServerCert, proxy, securityProtocolType, keepAlive)
         {
             cache = new CredentialCache { { new Uri(host), "Basic", new NetworkCredential(login, password) } };
 
@@ -256,16 +259,24 @@ namespace Redmine.Net.Api
         /// </value>
         public SecurityProtocolType SecurityProtocolType { get; private set; }
 
-        /// <summary>
-        ///     Returns the user whose credentials are used to access the API.
-        /// </summary>
-        /// <param name="parameters">The accepted parameters are: memberships and groups (added in 2.1).</param>
-        /// <returns></returns>
-        /// <exception cref="System.InvalidOperationException">
-        ///     An error occurred during deserialization. The original exception is available
-        ///     using the System.Exception.InnerException property.
-        /// </exception>
-        public User GetCurrentUser(NameValueCollection parameters = null)
+		/// <summary>
+		///     Gets or sets a value indicating whether [keep alive].
+		/// </summary>
+		/// <value>
+		///     <c>true</c> if [keep alive]; otherwise, <c>false</c>.
+		/// </value>
+		public bool KeepAlive { get; set; }
+
+		/// <summary>
+		///     Returns the user whose credentials are used to access the API.
+		/// </summary>
+		/// <param name="parameters">The accepted parameters are: memberships and groups (added in 2.1).</param>
+		/// <returns></returns>
+		/// <exception cref="System.InvalidOperationException">
+		///     An error occurred during deserialization. The original exception is available
+		///     using the System.Exception.InnerException property.
+		/// </exception>
+		public User GetCurrentUser(NameValueCollection parameters = null)
         {
             var url = UrlHelper.GetCurrentUserUrl(this);
             return WebApiHelper.ExecuteDownload<User>(this, url, "GetCurrentUser", parameters);
@@ -726,7 +737,7 @@ namespace Redmine.Net.Api
         /// <code></code>
         public virtual RedmineWebClient CreateWebClient(NameValueCollection parameters, bool uploadFile = false)
         {
-            var webClient = new RedmineWebClient { Proxy = Proxy };
+			var webClient = new RedmineWebClient { Proxy = Proxy };
             if (!uploadFile)
             {
                 webClient.Headers.Add(HttpRequestHeader.ContentType, MimeFormat == MimeFormat.Xml

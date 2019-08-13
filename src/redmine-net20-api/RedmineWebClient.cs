@@ -80,13 +80,13 @@ namespace Redmine.Net.Api
         /// </value>
         public bool PreAuthenticate { get; set; }
 
-        /// <summary>
-        ///     Gets or sets a value indicating whether [keep alive].
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if [keep alive]; otherwise, <c>false</c>.
-        /// </value>
-        public bool KeepAlive { get; set; }
+		/// <summary>
+		///     Gets or sets a value indicating whether [keep alive].
+		/// </summary>
+		/// <value>
+		///     <c>true</c> if [keep alive]; otherwise, <c>false</c>.
+		/// </value>
+		public bool KeepAlive { get; set; }
 
         /// <summary>
         ///     Returns a <see cref="T:System.Net.WebRequest" /> object for the specified resource.
